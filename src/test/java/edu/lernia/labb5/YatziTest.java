@@ -1,31 +1,26 @@
 package edu.lernia.labb5;
 
 import org.junit.jupiter.api.Test;
-
-import edu.lernia.labb5.Die;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class YatziTest {
     @Test
     void isYatziWhenAllDiceMatches() {
-        Die[] dice = new Die[5];
-        for(Die die: dice) {
-            die.value = 6;
+        Die[] diceArray = new Die[5];
+        for (int i = 0; i < 5; i++) {
+            diceArray[i] = new Die();
         }
-        //Assert something?
+        assertTrue(YatziMain.CheckForYatzi(diceArray));
     }
 
     @Test
     void isNotYatziWhenOneDieIsNotMatchingTheOther() {
-        Die[] dice = new Die[5];
-        for(Die die: dice) {
-            die.value = 6;
+        Die[] diceArray = new Die[5];
+        for (int i = 0; i < 5; i++) {
+            diceArray[i] = new Die();
         }
-        dice[5].value = 1;
-        //Assert something?
+        diceArray[4].value = 1;
+        assertFalse(YatziMain.CheckForYatzi(diceArray));
     }
+
 }
