@@ -3,55 +3,55 @@ package edu.lernia.labb5;
 import java.util.Scanner;
 
 public class YatziMain {
-    public static Die[] ds;
-    public static boolean bGameIsOn = true;
+    public static Die[] diceArray;
+    public static boolean gameIsRunning = true;
 
     public static void main(String[] args) {
-        int iturn = 0;
-        ds = new Die[5];
-        for(int d=0;d<5;d++) {
-            ds[d] = new Die();
+
+        CreateDiceArray();
+        RunYatziGame();
+
+    }
+
+    private static void CreateDiceArray() {
+        diceArray = new Die[5];
+        for (int i = 0; i < 5; i++) {
+            diceArray[i] = new Die();
         }
-        //We will continue until the game is over
-        while(bGameIsOn == true) {
-            iturn = 0;
+    }
+
+    private static void RunYatziGame() {
+        int turnCount;
+        while (gameIsRunning == true) {
+
+            turnCount = 0;
             System.out.println("Welcome to Yatzi!");
-            while(iturn < 3) {
-                System.out.println("Starting turn " + (iturn+1) + " of 3, rolling dice.");
-                for(int i=0;i<ds.length;i++) {
-                    ds[i].DieRoll();
-                    //ds[i].value = 5; //Test if yatzi work
-                    System.out.println(i + ": " + ds[i].getString());
-                }
-                //YATZI
-                boolean flag = true;
-                for(int j=1;j<5;j++) {
-                    if(ds[j].value!=ds[j-1].value) {
-                        //Set flag to false
-                        flag = false;
-                    }
-                }
-                if(flag == true) {
-                    System.out.println("You got YATZI! in " + ds[0].value + "'s");
+
+            while (turnCount < 3) {
+
+                RollDice(turnCount);
+                boolean isYatzi = CheckForYatzi(diceArray);
+
+                if (isYatzi == true) { // If yatzi is true
+                    System.out.println("You got YATZI! in " + diceArray[0].value + "'s");
                     return;
                 } else {
-                    //Here we check if there is no Yatzy: then we check what turn we are on and asks the player if we want to continue or not
-                    if(iturn != 2) {
+                    if (turnCount != 2) {
                         System.out.println("Want to throw again? (y for yes, anything else for no)");
-                        Scanner sc = new Scanner(System.in);
-                        if(sc.next().equals("y")) {
-                            ++iturn;
+                        Scanner scRollAgain = new Scanner(System.in);
+                        if (scRollAgain.next().equals("y")) {
+                            ++turnCount;
                         } else {
-                            bGameIsOn = !bGameIsOn;
+                            gameIsRunning = !gameIsRunning;
                             break;
                         }
                     } else {
                         System.out.println("Game over! Want to play again?");
-                        Scanner sc = new Scanner(System.in);
-                        if(sc.next().equals("y")) {
-                            iturn = 0;
+                        Scanner scPlayAgain = new Scanner(System.in);
+                        if (scPlayAgain.next().equals("y")) {
+                            turnCount = 0;
                         } else {
-                            bGameIsOn = !bGameIsOn;
+                            gameIsRunning = !gameIsRunning;
                             break;
                         }
                     }
@@ -59,4 +59,23 @@ public class YatziMain {
             }
         }
     }
+
+    private static void RollDice(int turnCount) {
+        System.out.println("Starting turn " + (turnCount + 1) + " of 3, rolling dice.");
+        for (int i = 0; i < diceArray.length; i++) {
+            diceArray[i].DieRoll();
+            System.out.println(i + ": " + diceArray[i].getString());
+        }
+    }
+
+    protected static boolean CheckForYatzi(Die[] dice) {
+        boolean isYatzi = true;
+        for (int i = 1; i < 5; i++) {
+            if (dice[i].value != dice[i - 1].value) {
+                isYatzi = false;
+            }
+        }
+        return isYatzi;
+    }
+
 }
